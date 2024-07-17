@@ -12,6 +12,6 @@ defmodule DesafioCli do
   end
 
   def phrase() do
-    "Hello, world!"
+    "Hello, new world!"
   end
 end
