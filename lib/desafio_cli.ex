@@ -9,18 +9,14 @@ defmodule DesafioCli do
   """
 
   def main(_args) do
+    kings = read_input()
 
-    kings = ["Fel", "Lei", "Sel", "Isi", "Fel", "Sel", "Sel", "Isi", "Fel", "Sel"]
-    # kings = []
-    # kings = read_input(kings)
-
-    new_kings = []
-    new_kings = rename_kings(kings, new_kings)
+    new_kings = rename_kings(kings)
 
     print_list(new_kings)
   end
   
-  def read_input(kings) do
+  def read_input(kings \\ []) do
     name = IO.gets("Digite o nome do/da rei/rainha: ")
     if name != "\n" do
       kings = List.insert_at(kings, -1, name)
@@ -30,26 +26,28 @@ defmodule DesafioCli do
     end
   end
 
-  def rename_kings(kings, new_kings) do
+  def rename_kings(kings, new_kings \\ []) do
     frequencies = Enum.frequencies(kings)
     name = List.last(kings)
     name_frequency = Map.get(frequencies, name)
-    # new_name = name <> " " <> Integer.to_string(name_frequency)
-    new_name = name <> " " <> indo_arabic_to_roman(name_frequency, "", 12)
+    
+    name = name |> String.replace("\r", "") |> String.replace("\n", "")
+
+    new_name = name <> " " <> indo_arabic_to_roman(name_frequency)
 
     new_kings = List.insert_at(new_kings, 0, new_name)
 
     remaining_kings = List.delete_at(kings, length(kings)-1)
 
     if length(remaining_kings) > 0 do
-      new_kings = rename_kings(remaining_kings, new_kings)
+      rename_kings(remaining_kings, new_kings)
     else
       new_kings
     end
 
   end
 
-  def indo_arabic_to_roman(number, roman_number, index) do
+  def indo_arabic_to_roman(number, roman_number \\ "", index \\ 12) do
     indo_arabic_base = [1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000]
     roman_base = ["I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"]
 
